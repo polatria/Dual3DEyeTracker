@@ -11,8 +11,8 @@ EYES = ['Right', 'Left']  # Window names
 TERMINATE = 27  # ESC key
 
 # Setup variables
-cap = [0] * 2  # Camera image sources
-img = [0] * 2  # Image buffers
+cap = [0] * len(EYES)  # Camera image sources
+img = [0] * len(EYES)  # Image buffers
 key = 0  # global key status
 lock = threading.Lock()  # lock object
 
@@ -45,10 +45,8 @@ for i in range(len(devices)):
         cap[1] = uvc.Capture(devices[i]['uid'])
         cap[1].frame_mode = (640, 480, 60)
 
-print(cap[0].avaible_modes)
-
 # Eye detector init
-trk = EyeDetector.alloc()
+trk = EyeDetector.alloc(len(EYES))
 
 # for FPS calculation
 tm = cv2.TickMeter()

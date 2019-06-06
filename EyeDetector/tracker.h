@@ -35,8 +35,7 @@ public:
 	cv::Mat K; // Camera intrinsic matrix in OpenCV format
 	cv::Vec<double, 8> distCoeffs; // (k1 k2 p1 p2 [k3 [k4 k5 k6]]) // k: radial, p: tangential
 
-	// Setup of classes that handle monocular/stereo camera setups
-	// We can encapslate them into a wrapper class in future update
+	// Variables that handle camera setups
 	std::vector<std::unique_ptr<eye_tracker::CameraUndistorter>> camera_undistorters; // Camera undistorters
 	std::vector<std::string> window_names;                                            // Window names
 	std::vector<std::unique_ptr<eye_tracker::EyeModelUpdater>> eye_model_updaters;    // 3D eye models

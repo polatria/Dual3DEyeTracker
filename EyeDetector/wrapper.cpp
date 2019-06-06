@@ -12,7 +12,10 @@ static void py_tracker_free(PyObject *obj) {
 }
 
 static PyObject* py_tracker_alloc(PyObject *self, PyObject *args) {
-	Tracker* const h = new Tracker(2);
+	int cam_num;
+	if (!PyArg_ParseTuple(args, "i", &cam_num))
+		Py_RETURN_NONE;
+	Tracker* const h = new Tracker(cam_num);
 	return PyCapsule_New(h, "_Tracker", py_tracker_free);
 }
 
@@ -29,7 +32,7 @@ static PyObject* py_detect(PyObject* self, PyObject *args) {
 	auto trk = (Tracker*)PyCapsule_GetPointer(py_obj, "_Tracker");
 	if (trk == NULL) Py_RETURN_NONE;
 
-	// Restore image array
+	// Convert ndarray to cv::Mat
 	cv::Mat img = pbcvt::fromNDArrayToMat(image);
 	
 	//std::ostringstream ss;

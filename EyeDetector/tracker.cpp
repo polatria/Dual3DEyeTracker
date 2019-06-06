@@ -71,7 +71,7 @@ void Tracker::detect(cv::Mat& image, int cam, char key)
 {
 	cv::Mat &img = image;
 	if (img.empty()) {
-		//is_run = false;
+		std::cout << "Image empty" << std::endl;
 		return;
 	}
 
