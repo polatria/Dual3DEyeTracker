@@ -25,8 +25,6 @@ static PyObject* py_detect(PyObject* self, PyObject *args) {
 
 	if (!PyArg_ParseTuple(args, "OOii", &py_obj, &image, &cam_num, &key))
 		Py_RETURN_NONE;
-	//std::cout << "CAM_NUM:" << cam_num << std::endl;
-	//std::cout << "Key:" << key << std::endl;
 
 	// Get Tracker class pointer
 	auto trk = (Tracker*)PyCapsule_GetPointer(py_obj, "_Tracker");
@@ -35,13 +33,21 @@ static PyObject* py_detect(PyObject* self, PyObject *args) {
 	// Convert ndarray to cv::Mat
 	cv::Mat img = pbcvt::fromNDArrayToMat(image);
 	
-	//std::ostringstream ss;
-	//ss << "Test" << cam_num;
-	//string winname = ss.str();
-	//cv::imshow(winname, img);
-
+	// Detect pupil and visualize result
 	trk->detect(img, cam_num, key);
-	Py_RETURN_NONE;
+
+	// Convert Pupil and Eyeball center value to python array
+	npy_intp dims[] = { 2, 3 };
+	auto arr = (PyArrayObject*)PyArray_EMPTY(2, dims, NPY_DOUBLE, 0);
+	auto ptr = (double*)PyArray_GETPTR1(arr, 0);
+	*(ptr++) = trk->ppl[0];
+	*(ptr++) = trk->ppl[1];
+	*(ptr++) = trk->ppl[2];
+	*(ptr++) = trk->eybl[0];
+	*(ptr++) = trk->eybl[1];
+	*(ptr++) = trk->eybl[2];
+
+	return PyArray_Return(arr);
 }
 
 static PyObject* py_example(PyObject *self, PyObject *args) {

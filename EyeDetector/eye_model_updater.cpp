@@ -242,33 +242,49 @@ namespace eye_tracker {
 				const double displayscale = 1.0;
 				singleeyefitter::Ellipse2D<double> pupil_el(sef::project(curr_circle, focal_length_));
 				realiabiliy = el.similarity(pupil_el);
-
-				//// 3D eyeball
-				//cv::RotatedRect rr_eye = eye_tracker::toImgCoord(sef::toRotatedRect(sef::project(simple_fitter_.eye, focal_length_)), img, displayscale);
-
-				//// 3D pupil
-				//singleeyefitter::Ellipse2D<double> pupil_el(sef::project(curr_circle, focal_length_));
-				//cv::RotatedRect rr_pupil = eye_tracker::toImgCoord(singleeyefitter::toRotatedRect(pupil_el), img, displayscale);
-
-				//// 3D gaze vector
-				//singleeyefitter::EyeModelFitter::Circle c_end = curr_circle;
-				//c_end.centre = curr_circle.centre + (10.0)*curr_circle.normal; // Unit: mm
-				//singleeyefitter::Ellipse2D<double> e_end(sef::project(c_end, focal_length_));
-				//cv::RotatedRect rr_end = eye_tracker::toImgCoord(singleeyefitter::toRotatedRect(e_end), img, displayscale);
-
 			}
 		}
 		return realiabiliy;
 	}
 
-	void EyeModelUpdater::render(cv::Mat &img, sef::Ellipse2D<double> &el, std::vector<cv::Point2f> &inlier_pts) {
+	// Original
+	//void EyeModelUpdater::render(cv::Mat &img, sef::Ellipse2D<double> &el, std::vector<cv::Point2f> &inlier_pts) {
+
+	//	if (simple_fitter_.eye) {
+	//		const float displayscale = 1.0f;
+
+	//		// Unproject the current 2D ellipse observation to a 3D disk
+	//		singleeyefitter::EyeModelFitter::Circle curr_circle = unproject(img, el, inlier_pts);
+
+	//		if (curr_circle && !isnan(curr_circle.normal(0, 0))) {
+	//			// 3D eyeball
+	//			cv::RotatedRect rr_eye = eye_tracker::toImgCoord(sef::toRotatedRect(sef::project(simple_fitter_.eye, focal_length_)), img, displayscale);
+	//			cv::ellipse(img, rr_eye, cv::Vec3b(255, 128, 0), 1, CV_AA);
+	//			cv::circle(img, rr_eye.center, 3, cv::Vec3b(255, 128, 0), 1); // Eyeball center projection
+
+	//			// 3D pupil
+	//			singleeyefitter::Ellipse2D<double> pupil_el(sef::project(curr_circle, focal_length_));
+	//			cv::RotatedRect rr_pupil = eye_tracker::toImgCoord(singleeyefitter::toRotatedRect(pupil_el), img, displayscale);
+	//			cv::ellipse(img, rr_pupil, cv::Vec3b(0, 255, 128), 1, CV_AA);
+	//			cv::line(img, rr_eye.center, rr_pupil.center, cv::Vec3b(255, 128, 0), 1, CV_AA);
+
+	//			// 3D gaze vector
+	//			singleeyefitter::EyeModelFitter::Circle c_end = curr_circle;
+	//			c_end.centre = curr_circle.centre + (10.0)*curr_circle.normal; // Unit: mm
+	//			singleeyefitter::Ellipse2D<double> e_end(sef::project(c_end, focal_length_));
+	//			cv::RotatedRect rr_end = eye_tracker::toImgCoord(singleeyefitter::toRotatedRect(e_end), img, displayscale);
+	//			cv::line(img, cv::Point(rr_pupil.center), cv::Point(rr_end.center), cv::Vec3b(0, 255, 128), 2, CV_AA);
+
+	//		}
+	//	}
+	//}
+
+	// Modified
+	void EyeModelUpdater::render(cv::Mat &img, singleeyefitter::EyeModelFitter::Circle curr_circle) {
 
 		if (simple_fitter_.eye) {
 			const float displayscale = 1.0f;
-
-			// Unproject the current 2D ellipse observation to a 3D disk
-			singleeyefitter::EyeModelFitter::Circle curr_circle = unproject(img, el, inlier_pts);
-
+			
 			if (curr_circle && !isnan(curr_circle.normal(0, 0))) {
 				// 3D eyeball
 				cv::RotatedRect rr_eye = eye_tracker::toImgCoord(sef::toRotatedRect(sef::project(simple_fitter_.eye, focal_length_)), img, displayscale);

@@ -77,7 +77,10 @@ namespace eye_tracker {
 
 		double compute_reliability(cv::Mat &img, sef::Ellipse2D<double> &el, std::vector<cv::Point2f> &inlier_pts);
 
-		void render(cv::Mat &img, sef::Ellipse2D<double> &el, std::vector<cv::Point2f> &inlier_pts);
+		// Original
+		// void render(cv::Mat &img, sef::Ellipse2D<double> &el, std::vector<cv::Point2f> &inlier_pts);
+		// Modified
+		void EyeModelUpdater::render(cv::Mat &img, singleeyefitter::EyeModelFitter::Circle curr_circle);
 
 		void reset();
 

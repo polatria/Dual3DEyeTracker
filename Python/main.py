@@ -69,7 +69,9 @@ while is_run:
 
     # Process each camera images
     for i in range(len(EYES)):
-        EyeDetector.detect(trk, img[i], i, key)
+        pts = EyeDetector.detect(trk, img[i], i, key)
+        # print(f"pupil: {np.array(pts)[0]}")
+        # print(f"eyeball: {np.array(pts)[1]}")
         # cv2.imshow(EYES[i], img[i])
 
     cv2.waitKey(1)  # Required to display camera image

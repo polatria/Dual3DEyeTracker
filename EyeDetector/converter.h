@@ -18,6 +18,20 @@ using namespace cv;
 
 static PyObject* opencv_error = 0;
 
+//===================    MACROS    =================================================================
+
+#define ERRWRAP2(expr) \
+try \
+{ \
+    PyAllowThreads allowThreads; \
+    expr; \
+} \
+catch (const cv::Exception &e) \
+{ \
+    PyErr_SetString(opencv_error, e.what()); \
+    return 0; \
+}
+
 //===================   ERROR HANDLING     =========================================================
 
 static int failmsg(const char *fmt, ...) {
@@ -33,6 +47,7 @@ static int failmsg(const char *fmt, ...) {
 }
 
 //===================   THREADING     ==============================================================
+
 class PyAllowThreads {
 public:
 	PyAllowThreads() :
@@ -155,6 +170,21 @@ public:
 NumpyAllocator g_numpyAllocator;
 
 //===================   STANDALONE CONVERTER FUNCTIONS     =========================================
+
+PyObject* fromMatToNDArray(const Mat& m) {
+	if (!m.data)
+		Py_RETURN_NONE;
+	Mat temp,
+		*p = (Mat*)&m;
+	if (!p->u || p->allocator != &g_numpyAllocator) {
+		temp.allocator = &g_numpyAllocator;
+		ERRWRAP2(m.copyTo(temp));
+		p = &temp;
+	}
+	PyObject* o = (PyObject*)p->u->userdata;
+	Py_INCREF(o);
+	return o;
+}
 
 Mat fromNDArrayToMat(PyObject* o) {
 	cv::Mat m;

@@ -40,4 +40,6 @@ public:
 	std::vector<std::string> window_names;                                            // Window names
 	std::vector<std::unique_ptr<eye_tracker::EyeModelUpdater>> eye_model_updaters;    // 3D eye models
 	PupilFitter pupilFitter;
+
+	const double *ppl, *eybl;	
 };
