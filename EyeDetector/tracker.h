@@ -30,7 +30,7 @@ public:
 
 	int dummy(int w, int h, int* arr);
 
-	std::string calib_path = { "D:/Developing/sawai/vs/EyeDetector/docs/cameraintrinsics_eye.txt" };
+	std::string calib_path = { "D:/Developing/sawai/vs/EyeDetector/data/cameraintrinsics_eye.txt" };
 	eye_tracker::UbitrackTextReader<eye_tracker::Caib> ubitrack_calib_text_reader;
 	cv::Mat K; // Camera intrinsic matrix in OpenCV format
 	cv::Vec<double, 8> distCoeffs; // (k1 k2 p1 p2 [k3 [k4 k5 k6]]) // k: radial, p: tangential
@@ -41,5 +41,5 @@ public:
 	std::vector<std::unique_ptr<eye_tracker::EyeModelUpdater>> eye_model_updaters;    // 3D eye models
 	PupilFitter pupilFitter;
 
-	const double *ppl, *eybl;	
+	const double *ppl, *eybl;
 };

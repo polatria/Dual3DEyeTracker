@@ -7,8 +7,8 @@ int main(int argc, char *argv[]) {
 
 	// for debug
 	std::vector<cv::VideoCapture> vid(CAM_NUM);
-	vid[0].open("D:/Developing/sawai/vs/3DEyeTracker_wrapper/docs/Right.avi");
-	vid[1].open("D:/Developing/sawai/vs/3DEyeTracker_wrapper/docs/Left.avi");
+	vid[0].open("../../../data/Right.avi");
+	vid[1].open("../../../data/Left.avi");
 	std::vector<cv::Mat> images(CAM_NUM);
 
 	Tracker* trk = new Tracker(CAM_NUM);
@@ -128,13 +128,13 @@ void Tracker::detect(cv::Mat& image, int cam, char key)
 	// 3D eye ball
 	if (eye_model_updaters[cam]->is_model_built()) {
 		//cv::putText(img, "Reliability: " + std::to_string(ellipse_reliability), cv::Point(30, 440), cv::FONT_HERSHEY_SIMPLEX, 1.0, cv::Scalar(0, 128, 255), 1);
-		
+
 		// Unproject the current 2D ellipse observation to a 3D disk
 		singleeyefitter::EyeModelFitter::Circle curr_circle = eye_model_updaters[cam]->unproject(img, el, inlier_pts);
 		ppl = curr_circle.centre.data();
 		eybl = eye_model_updaters[cam]->fitter().eye.centre.data();
 		//::cout << "pupil: " << curr_circle.centre << std::endl << "eyeball: " << eye_model_updaters[cam]->fitter().eye.centre << std::endl;
-		
+
 		if (is_reliable) {
 			eye_model_updaters[cam]->render(img_rgb, curr_circle);
 		}

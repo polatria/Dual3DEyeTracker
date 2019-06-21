@@ -32,7 +32,7 @@ static PyObject* py_detect(PyObject* self, PyObject *args) {
 
 	// Convert ndarray to cv::Mat
 	cv::Mat img = pbcvt::fromNDArrayToMat(image);
-	
+
 	// Detect pupil and visualize result
 	trk->detect(img, cam_num, key);
 
